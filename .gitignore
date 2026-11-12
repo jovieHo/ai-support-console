@@ -1,0 +1,22 @@
+.env
+*.log
+*.err.log
+__pycache__/
+*.pyc
+.venv/
+backend/*.db
+frontend/node_modules/
+frontend/dist/
+backend/storage/
+.workbuddy/
+*.db.bak-*
+# 灌知识库用的测试文档，不入库
+/智企通产品知识文档.txt
+# 仓库只保留 README，其余文档留在本地；docs/knowledge 是知识库语料，需入库
+/docs/*
+!/docs/knowledge/
+/DESIGN.md
+.idea/
+
+# 旧 git 历史备份，不入库
+.git-backup/

@@ -1,0 +1,1224 @@
+/**
+ * 智企通 AI 商务助手平台 - 全局样式表
+ *
+ * 设计风格：Apple Design Language（苹果设计语言）
+ * - 毛玻璃效果（backdrop-filter）面板
+ * - 柔和的阴影与圆角
+ * - 系统字体栈（SF Pro / PingFang SC）
+ * - 响应式布局（移动端适配）
+ */
+
+/* ============================================
+ * 全局细滚动条
+ * Windows 默认滚动条又宽又灰，会压住卡片内容；
+ * 统一改为 6px 圆角细条，悬停加深
+ * ============================================ */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  border-radius: 3px;
+  background: rgba(0, 0, 0, 0.15);
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(0, 0, 0, 0.3);
+}
+
+/* ============================================
+ * CSS 自定义属性（设计令牌）
+ * 统一管理颜色、阴影等设计变量
+ * ============================================ */
+:root {
+  /* 系统字体栈，优先使用苹果系统字体 */
+  font-family:
+    -apple-system,
+    BlinkMacSystemFont,
+    "SF Pro Display",
+    "SF Pro Text",
+    "PingFang SC",
+    "Microsoft YaHei",
+    system-ui,
+    sans-serif;
+  color: #1d1d1f;
+  background: #f5f5f7;
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+
+  /* --- 设计令牌：背景色 --- */
+  --apple-bg: #f5f5f7;                          /* 页面主背景 */
+  --apple-panel: rgba(255, 255, 255, 0.78);     /* 半透明面板背景 */
+  --apple-panel-strong: rgba(255, 255, 255, 0.92); /* 强调面板背景 */
+
+  /* --- 设计令牌：文字颜色 --- */
+  --apple-text: #1d1d1f;                        /* 主文字颜色 */
+  --apple-secondary: #6e6e73;                   /* 次要文字颜色 */
+  --apple-tertiary: #86868b;                    /* 三级文字颜色 */
+
+  /* --- 设计令牌：边框与强调色 --- */
+  --apple-hairline: rgba(60, 60, 67, 0.14);     /* 极细边框颜色 */
+  --apple-blue: #0071e3;                        /* 苹果蓝主色调 */
+  --apple-blue-soft: rgba(0, 113, 227, 0.1);    /* 浅蓝色背景 */
+
+  /* --- 设计令牌：阴影 --- */
+  --apple-shadow: 0 22px 60px rgba(0, 0, 0, 0.08), 0 6px 18px rgba(0, 0, 0, 0.05);       /* 大阴影 */
+  --apple-shadow-light: 0 12px 30px rgba(0, 0, 0, 0.06);                                 /* 小阴影 */
+}
+
+/* ============================================
+ * 全局重置与基础样式
+ * ============================================ */
+
+/* 统一盒模型为 border-box */
+* {
+  box-sizing: border-box;
+}
+
+/* body 基础样式 */
+body {
+  margin: 0;
+  min-width: 320px;
+  min-height: 100vh;
+  background: var(--apple-bg);
+}
+
+/* 表单元素继承字体，确保视觉统一 */
+button,
+input,
+textarea,
+select {
+  font: inherit;
+}
+
+/* Vue 根节点占满视口 */
+#app {
+  min-height: 100vh;
+}
+
+/* ============================================
+ * 应用外壳布局：侧边栏 + 主工作区
+ * 使用 CSS Grid 双栏布局，左侧 260px 固定，右侧自适应
+ * ============================================ */
+.app-shell {
+  display: grid;
+  grid-template-columns: 260px minmax(0, 1fr);
+  min-height: 100vh;
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.72), rgba(245, 245, 247, 0.94)),
+    var(--apple-bg);
+}
+
+/* --- 侧边导航栏 --- */
+.sidebar {
+  display: flex;
+  position: sticky;
+  top: 0;
+  flex-direction: column;
+  height: 100vh;
+  padding: 20px 16px;
+  color: var(--apple-text);
+  background: rgba(255, 255, 255, 0.72);
+  border-right: 1px solid var(--apple-hairline);
+  box-shadow: 1px 0 0 rgba(255, 255, 255, 0.76) inset;
+  backdrop-filter: blur(24px) saturate(1.35);  /* 毛玻璃效果 */
+}
+
+/* --- 品牌标识区 --- */
+.brand {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  padding: 10px 8px 24px;
+}
+
+/* 品牌图标：蓝色渐变圆角方块 */
+.brand svg {
+  padding: 8px;
+  width: 40px;
+  height: 40px;
+  color: #ffffff;
+  border-radius: 8px;
+  background: linear-gradient(180deg, #2a85ff, #006edb);
+  box-shadow: 0 10px 24px rgba(0, 113, 227, 0.24);
+}
+
+.brand strong,
+.brand span {
+  display: block;
+}
+
+/* 品牌副标题（用户名+角色） */
+.brand span {
+  margin-top: 4px;
+  color: var(--apple-tertiary);
+  font-size: 12px;
+}
+
+/* --- 导航菜单列表 --- */
+.sidebar nav {
+  display: grid;
+  gap: 8px;
+}
+
+/* 导航链接与退出按钮共用样式 */
+.sidebar a,
+.logout {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  min-height: 42px;
+  padding: 0 12px;
+  border: 0;
+  border-radius: 8px;
+  color: #3a3a3c;
+  background: transparent;
+  text-decoration: none;
+  cursor: pointer;
+  transition:
+    background-color 0.18s ease,
+    color 0.18s ease,
+    box-shadow 0.18s ease,
+    transform 0.18s ease;
+}
+
+/* 当前激活的导航项高亮 */
+.sidebar a.router-link-active {
+  color: var(--apple-blue);
+  background: var(--apple-blue-soft);
+  box-shadow: 0 1px 0 rgba(255, 255, 255, 0.8) inset;
+}
+
+/* 导航项悬停效果 */
+.sidebar a:hover,
+.logout:hover {
+  background: rgba(0, 0, 0, 0.045);
+}
+
+/* 退出登录按钮：始终位于侧边栏底部 */
+.logout {
+  margin-top: auto;
+  width: 100%;
+}
+
+/* --- 右侧主工作区 --- */
+.workspace {
+  min-width: 0;
+  padding: 28px;
+}
+
+/* 对话工作区占满视口高度、直接贴底，
+   此时 workspace 底部留白会让页面底部露出一条异色区域，去掉它 */
+.workspace:has(.chat-workbench) {
+  padding-bottom: 0;
+}
+
+/* ============================================
+ * 登录页样式
+ * 全屏居中布局，背景模糊图片 + 毛玻璃登录面板
+ * ============================================ */
+
+/* 登录页容器：居中网格布局 */
+.login-page {
+  display: grid;
+  position: relative;
+  overflow: hidden;
+  min-height: 100vh;
+  place-items: center;
+  padding: 24px;
+  background: #dff8fb;
+}
+
+/* 伪元素：模糊背景图 */
+.login-page::before {
+  content: "";
+  position: absolute;
+  inset: -18px;
+  background: url("/src/assets/login-bg.png") center / cover no-repeat;
+  filter: blur(10px);
+  opacity: 0.72;
+  transform: scale(1.04);
+}
+
+/* 伪元素：背景遮罩层 */
+.login-page::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: rgba(232, 250, 252, 0.28);
+}
+
+/* 登录面板：毛玻璃卡片效果 */
+.login-panel {
+  position: relative;
+  z-index: 1;
+  width: min(460px, 100%);
+  padding: 34px;
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.78);
+  border: 1px solid rgba(255, 255, 255, 0.72);
+  box-shadow: 0 28px 80px rgba(20, 108, 125, 0.22), 0 1px 0 rgba(255, 255, 255, 0.9) inset;
+  backdrop-filter: blur(18px) saturate(1.26);
+}
+
+/* 登录面板标题与区块标题共用样式 */
+.login-panel h1,
+.section-title h2 {
+  margin: 0;
+  color: var(--apple-text);
+  letter-spacing: 0;
+}
+
+.login-panel h1 {
+  margin-bottom: 18px;
+  font-size: 30px;
+  line-height: 1.14;
+  font-weight: 700;
+}
+
+/* 区块上方小标题（eyebrow 样式） */
+.eyebrow,
+.section-title p {
+  margin: 0 0 6px;
+  color: var(--apple-secondary);
+  font-size: 13px;
+}
+
+/* ============================================
+ * 通用页面布局组件
+ * ============================================ */
+
+/* 通用页面网格容器 */
+.page-grid {
+  display: grid;
+  gap: 20px;
+}
+
+/* 聊天工作台：左侧会话列表 + 右侧聊天区 */
+.chat-workbench {
+  display: grid;
+  grid-template-columns: 300px minmax(0, 1fr);
+  /* 行高锁定为容器高度：否则行按内容自适应，
+     左栏内容偏高时整行被撑爆，底部的输入框会被裁掉 */
+  grid-template-rows: minmax(0, 1fr);
+  gap: 0;
+  align-items: stretch;
+  /* 高度 = 视口 - 顶部留白；workspace 底部留白已通过
+     .workspace:has(.chat-workbench) 去掉，工作区直接贴住视口底边 */
+  height: calc(100vh - 28px);
+  border-radius: 16px 16px 0 0;
+  overflow: hidden;
+  border: 1px solid var(--apple-hairline);
+  border-bottom: none;
+}
+
+/* 会话面板折叠时，左侧缩小为仅 56px */
+.chat-workbench:has(.conversation-panel.collapsed) {
+  grid-template-columns: 56px minmax(0, 1fr);
+}
+
+/* 双列网格布局 */
+.page-grid.two,
+.chart-grid {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+/* 图表网格容器 */
+.chart-grid {
+  display: grid;
+  gap: 20px;
+}
+
+/* 通用面板：毛玻璃卡片 */
+.panel {
+  min-width: 0;
+  padding: 24px;
+  border: 1px solid var(--apple-hairline);
+  border-radius: 10px;
+  background: var(--apple-panel);
+  box-shadow: var(--apple-shadow-light);
+  backdrop-filter: blur(22px) saturate(1.24);
+}
+
+/* 区块标题栏：标题 + 操作按钮 */
+.section-title {
+  display: flex;
+  gap: 16px;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 18px;
+}
+
+.section-title h2 {
+  font-size: 25px;
+  line-height: 1.16;
+  font-weight: 700;
+}
+
+.section-title p {
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+/* 区块标题栏右侧操作按钮组 */
+.section-title-actions {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+
+/* ============================================
+ * 聊天消息区域
+ * ============================================ */
+
+/* 聊天主区：占满一屏高度，纵向排布 标题 → 消息 → 输入框。
+   与左侧会话列表合并在同一个容器里，不做卡片式分隔，
+   只用底色区分：会话列表偏灰，聊天区偏白 */
+.chat-panel {
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  border: none;
+  border-radius: 0;
+  background: #ffffff;
+  box-shadow: none;
+  backdrop-filter: none;
+}
+
+/* 消息列表：不再是"框中框"——无边界、无底色，
+   直接铺在聊天画布上，占满剩余空间滚动 */
+.message-list {
+  display: grid;
+  align-content: start;
+  gap: 12px;
+  flex: 1;
+  min-height: 0;
+  overflow: auto;
+  padding: 8px 12px 16px;
+}
+
+/* ============================================
+ * 会话列表面板（可折叠）
+ * ============================================ */
+
+/* 会话面板容器：不再是一张独立卡片——
+   边框/圆角/阴影/毛玻璃全部去掉，偏灰底直接贴合外层容器，
+   与右侧聊天区仅靠底色区分 */
+.conversation-panel {
+  display: grid;
+  /* 内容顶部对齐：否则剩余高度会被 grid 均摊到各行，
+     会话少时标题/工具栏/卡片之间会出现大段空隙 */
+  align-content: start;
+  gap: 12px;
+  padding: 18px;
+  border: none;
+  border-radius: 0;
+  background: #f1f2f4;
+  box-shadow: none;
+  backdrop-filter: none;
+  transition: width 0.25s ease, padding 0.25s ease;
+}
+
+/* 折叠状态：收缩为窄条 */
+.conversation-panel.collapsed {
+  width: 56px;
+  min-width: 56px;
+  padding: 12px 8px;
+  justify-items: center;
+}
+
+/* 折叠时头部垂直排列 */
+.conversation-panel.collapsed .conversation-header {
+  flex-direction: column;
+  align-items: center;
+}
+
+/* 折叠时折叠按钮图标旋转 */
+.conversation-panel.collapsed .collapse-toggle svg {
+  transform: rotate(-90deg);
+}
+
+/* 折叠按钮图标过渡动画 */
+.collapse-toggle svg {
+  transition: transform 0.25s ease;
+}
+
+/* 会话头部、标题、元信息等弹性布局共用样式 */
+.conversation-header,
+.conversation-title,
+.conversation-meta,
+.document-status-item,
+.document-status-meta {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.conversation-header p,
+.conversation-header h2 {
+  margin: 0;
+}
+
+/* 会话头部副标题 */
+.conversation-header p {
+  margin-bottom: 6px;
+  color: var(--apple-secondary);
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+}
+
+/* 会话头部主标题 */
+.conversation-header h2 {
+  font-size: 22px;
+  line-height: 1.18;
+}
+
+/* 会话头部操作按钮组 */
+.conversation-header-actions {
+  display: flex;
+  gap: 6px;
+  align-items: center;
+}
+
+/* 会话工具栏 */
+.conversation-tools {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  min-height: 36px;
+}
+
+/* 会话列表容器：可滚动 */
+.conversation-list {
+  display: grid;
+  /* 锁定列为容器宽度：否则卡片里不换行的长文本会把
+     网格列撑到超出容器（grid blowout），卡片宽过滚动条 */
+  grid-template-columns: minmax(0, 1fr);
+  align-content: start;
+  gap: 10px;
+  max-height: 650px;
+  overflow: auto;
+  overflow-x: hidden;
+  /* 预留滚动条槽位，卡片右缘与滚动条之间留出空隙 */
+  scrollbar-gutter: stable;
+  scrollbar-width: thin;
+  padding-right: 8px;
+}
+
+/* 折叠时隐藏会话列表 */
+.conversation-panel.collapsed .conversation-list {
+  display: none;
+}
+
+/* 单个会话项卡片：灰底上的白色卡片 */
+.conversation-item {
+  display: grid;
+  gap: 8px;
+  /* 允许收缩到列宽以内：否则内部长文本同样会把卡片撑爆 */
+  min-width: 0;
+  padding: 12px;
+  border: 1px solid var(--apple-hairline);
+  border-radius: 8px;
+  background: #ffffff;
+  cursor: pointer;
+  transition:
+    border-color 0.18s ease,
+    background-color 0.18s ease,
+    box-shadow 0.18s ease;
+}
+
+/* 当前激活的会话项高亮 */
+.conversation-item.active {
+  border-color: rgba(0, 113, 227, 0.32);
+  background: rgba(0, 113, 227, 0.08);
+  box-shadow: 0 10px 24px rgba(0, 113, 227, 0.08);
+}
+
+/* 标题行：标题占满剩余宽度，收藏星号统一钉在最右一列 */
+.conversation-title {
+  display: flex;
+  gap: 4px;
+  align-items: center;
+  min-width: 0;
+}
+
+.conversation-title strong {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  color: var(--apple-text);
+  font-size: 14px;
+  line-height: 1.35;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.conversation-title .el-button {
+  flex-shrink: 0;
+}
+
+/* 会话摘要：最多显示 2 行 */
+.conversation-item p {
+  display: -webkit-box;
+  overflow: hidden;
+  margin: 0;
+  color: var(--apple-secondary);
+  font-size: 13px;
+  line-height: 1.5;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+}
+
+/* 会话元信息（时间等） */
+.conversation-meta {
+  color: var(--apple-tertiary);
+  font-size: 12px;
+}
+
+/* 重命名按钮 */
+.rename-button {
+  justify-self: start;
+  min-height: 28px;
+  padding: 0;
+}
+
+/* 会话项操作按钮组 */
+.conversation-item-actions {
+  display: flex;
+  gap: 4px;
+  align-items: center;
+}
+
+/* ============================================
+ * 聊天消息气泡
+ * ============================================ */
+
+/* AI 消息气泡：白色背景，左对齐 */
+.message {
+  display: flex;
+  gap: 8px;
+  align-items: flex-start;
+  max-width: 86%;
+  padding: 10px 12px;
+  border-radius: 8px;
+  color: var(--apple-text);
+  background: rgba(255, 255, 255, 0.88);
+  border: 1px solid rgba(60, 60, 67, 0.08);
+  box-shadow: 0 8px 22px rgba(0, 0, 0, 0.05);
+}
+
+/* 用户消息气泡：蓝色渐变，右对齐 */
+.message.user {
+  justify-self: end;
+  color: #ffffff;
+  background: linear-gradient(180deg, #1687ff, #0071e3);
+  border-color: rgba(0, 113, 227, 0.34);
+  box-shadow: 0 12px 28px rgba(0, 113, 227, 0.18);
+}
+
+/* 消息段落、回答、来源项等共用文字样式 */
+.message p,
+.answer,
+.source-item p,
+.document-status-item p {
+  margin: 0;
+  line-height: 1.7;
+}
+
+/* AI 生成的长文本（聊天回复 / 知识库答案）：
+   保留模型输出的换行，否则整段折叠成一行 */
+.message p,
+.answer {
+  white-space: pre-line;
+}
+
+/* 消息气泡内的操作按钮（如复制） */
+.message button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  border: 0;
+  border-radius: 999px;
+  color: var(--apple-blue);
+  background: rgba(0, 113, 227, 0.08);
+  cursor: pointer;
+}
+
+/* 消息来源标签组 */
+.message-sources {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 8px;
+}
+
+/* 消息输入栏（composer）：DeepSeek 式悬浮卡片，
+   输入框 + 麦克风 + 发送都收进同一张圆角卡片 */
+.composer {
+  display: flex;
+  gap: 10px;
+  margin-top: 16px;
+  align-items: flex-end;
+  padding: 12px 14px;
+  border: 1px solid var(--apple-hairline);
+  border-radius: 14px;
+  background: #ffffff;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.06);
+}
+
+/* 输入框融入卡片：去掉 Element 默认的边框与内阴影，
+   让 textarea 看起来直接"长"在卡片里 */
+.composer .el-textarea__inner {
+  background: transparent;
+  box-shadow: none;
+  padding: 6px 4px;
+  resize: none;
+}
+
+/* composer 中的输入框占满剩余空间 */
+.composer > .el-input {
+  flex: 1;
+  min-width: 0;
+}
+
+/* composer 中的按钮不收缩，确保文字完整显示 */
+.composer > .el-button {
+  flex-shrink: 0;
+}
+
+/* 知识来源引用项 */
+.source-item {
+  margin-top: 12px;
+  padding: 12px;
+  border: 1px solid var(--apple-hairline);
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.66);
+  box-shadow: 0 1px 0 rgba(255, 255, 255, 0.82) inset;
+}
+
+/* ============================================
+ * 知识库页面
+ * ============================================ */
+
+/* 知识库页面整体布局 */
+.knowledge-page {
+  display: grid;
+  gap: 18px;
+}
+
+/* 指标卡片行：三列等宽 */
+.metric-row {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 14px;
+}
+
+/* 单个指标卡片 */
+.metric-card {
+  display: grid;
+  gap: 8px;
+  padding: 18px;
+  border: 1px solid var(--apple-hairline);
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.82);
+  box-shadow: var(--apple-shadow-light);
+  backdrop-filter: blur(18px) saturate(1.22);
+}
+
+/* 指标标签 */
+.metric-card span {
+  color: var(--apple-secondary);
+  font-size: 13px;
+  font-weight: 600;
+}
+
+/* 指标数值 */
+.metric-card strong {
+  color: var(--apple-text);
+  font-size: 30px;
+  line-height: 1;
+}
+
+/* 指标口径说明（数值下方的小字） */
+.metric-card small {
+  color: var(--apple-secondary);
+  font-size: 11px;
+  line-height: 1.4;
+}
+
+/* ============================================
+ * 决策大屏
+ * ============================================ */
+
+.dashboard {
+  display: grid;
+  gap: 20px;
+}
+
+/* 图表容器：为空态提示提供定位基准 */
+.chart-wrap {
+  position: relative;
+}
+
+/* 图表无数据时的遮罩文案 */
+.chart-empty {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0;
+  color: var(--apple-secondary);
+  font-size: 13px;
+}
+
+/* 指标口径说明列表 */
+.metric-notes {
+  display: grid;
+  gap: 12px;
+  margin: 0;
+}
+
+.metric-notes dt {
+  margin-bottom: 4px;
+  color: var(--apple-text);
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.metric-notes dd {
+  margin: 0;
+  color: var(--apple-secondary);
+  font-size: 12px;
+  line-height: 1.6;
+}
+
+/* 知识管理器容器 */
+.knowledge-manager {
+  display: grid;
+  gap: 14px;
+}
+
+.knowledge-manager .el-tabs {
+  min-width: 0;
+}
+
+.knowledge-manager .el-table {
+  max-width: 100%;
+}
+
+/* 知识库顶部工具栏 */
+.knowledge-topbar {
+  display: flex;
+  gap: 14px;
+  align-items: center;
+  justify-content: space-between;
+}
+
+/* 上传按钮组贴左排布，覆盖共享规则里的 space-between */
+.knowledge-topbar .upload-actions {
+  justify-content: flex-start;
+}
+
+.knowledge-topbar .el-upload-list {
+  margin: 0;
+}
+
+/* 只有真的选中了文件才给文件列表留间距，避免空列表把工具栏撑出 phantom 高度 */
+.knowledge-topbar .el-upload-list li:first-child {
+  margin-top: 8px;
+}
+
+/* 知识库搜索框 */
+.knowledge-search {
+  width: min(360px, 100%);
+}
+
+/* 知识分块列表 */
+.chunk-list {
+  display: grid;
+  align-content: start;
+  gap: 12px;
+  max-height: 520px;
+  overflow: auto;
+  padding: 2px 4px 6px;
+}
+
+/* 来源项和来源头部的辅助文字 */
+.source-item span,
+.source-header span {
+  color: var(--apple-tertiary);
+  font-size: 12px;
+}
+
+/* 知识面板（抽屉内） */
+.knowledge-panel {
+  display: grid;
+  align-content: start;
+  gap: 14px;
+  padding: 20px;
+}
+
+/* 知识详情抽屉：去掉内边距 */
+.knowledge-drawer .el-drawer__body {
+  padding: 0;
+}
+
+/* 知识详情抽屉内的面板：满高无边距 */
+.knowledge-drawer .panel {
+  min-height: 100%;
+  border: 0;
+  border-radius: 0;
+  box-shadow: none;
+}
+
+/* ============================================
+ * 文档状态列表
+ * ============================================ */
+
+/* 文档状态列表容器 */
+.document-status-list {
+  display: grid;
+  gap: 10px;
+}
+
+/* 单个文档状态项 */
+.document-status-item {
+  align-items: flex-start;
+  padding: 12px 14px;
+  border: 1px solid var(--apple-hairline);
+  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.62);
+}
+
+/* 文档名：单行溢出省略 */
+.document-status-item strong {
+  display: block;
+  overflow: hidden;
+  max-width: 230px;
+  color: var(--apple-text);
+  font-size: 13px;
+  line-height: 1.35;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.document-status-item p {
+  margin-top: 5px;
+  color: var(--apple-secondary);
+  font-size: 12px;
+}
+
+/* 文档状态元信息（右对齐） */
+.document-status-meta {
+  flex: 0 0 auto;
+  flex-direction: column;
+  align-items: flex-end;
+  color: var(--apple-tertiary);
+  font-size: 12px;
+}
+
+/* 文档折叠面板 */
+.docs-collapse {
+  border-top: 0;
+}
+
+.docs-collapse .el-collapse-item__header {
+  border-bottom: 0;
+  font-weight: 600;
+}
+
+.docs-collapse .el-collapse-item__wrap {
+  border-bottom: 0;
+}
+
+.docs-collapse-header {
+  width: 100%;
+}
+
+/* 知识工具区 */
+.knowledge-tools {
+  display: grid;
+  gap: 10px;
+}
+
+/* 知识操作栏、上传操作栏、来源头部等弹性布局共用 */
+.knowledge-actions,
+.upload-actions,
+.source-header,
+.source-title {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  justify-content: space-between;
+}
+
+/* 上传提示条 */
+.upload-strip {
+  display: flex;
+  gap: 10px;
+  align-items: flex-start;
+  padding: 12px;
+  border: 1px solid rgba(0, 113, 227, 0.14);
+  border-radius: 8px;
+  color: #35506b;
+  background: rgba(0, 113, 227, 0.06);
+  font-size: 13px;
+  line-height: 1.6;
+}
+
+/* ============================================
+ * AI 回答与来源展示
+ * ============================================ */
+
+/* 回答区域和来源列表 */
+.answer-box,
+.source-list {
+  padding-top: 4px;
+}
+
+.answer-box h3,
+.source-list h3,
+.panel h3 {
+  margin: 0 0 10px;
+  color: var(--apple-text);
+  font-size: 16px;
+  line-height: 1.35;
+}
+
+.source-title {
+  margin-bottom: 8px;
+}
+
+/* 来源项内容保留换行 */
+.source-item p {
+  white-space: pre-wrap;
+}
+
+/* Agent 执行结果区域 */
+.agent-result {
+  margin-top: 16px;
+}
+
+.agent-result .source-tag {
+  margin-left: 4px;
+}
+
+.agent-result .meta-line {
+  margin: 8px 0 0;
+  color: var(--el-text-color-secondary);
+  font-size: 13px;
+}
+
+/* ============================================
+ * 商务数据字段工具栏
+ * ============================================ */
+
+.field-toolbar {
+  display: flex;
+  justify-content: flex-end;
+  width: 100%;
+  margin-bottom: 8px;
+}
+
+/* ============================================
+ * 图表组件
+ * ============================================ */
+
+/* ECharts 图表容器 */
+.chart {
+  width: 100%;
+  height: 320px;
+}
+
+/* ============================================
+ * Element Plus 组件样式覆盖
+ * 统一调整 Element Plus 组件风格为 Apple Design
+ * ============================================ */
+
+/* 按钮全局样式 */
+.el-button {
+  border-radius: 8px;
+  font-weight: 600;
+  box-shadow: none;
+}
+
+/* 主按钮（primary）：使用苹果蓝 */
+.el-button--primary {
+  --el-button-bg-color: var(--apple-blue);
+  --el-button-border-color: var(--apple-blue);
+  --el-button-hover-bg-color: #147ce5;
+  --el-button-hover-border-color: #147ce5;
+  --el-button-active-bg-color: #0068d8;
+  --el-button-active-border-color: #0068d8;
+  box-shadow: 0 8px 18px rgba(0, 113, 227, 0.18);
+}
+
+/* 输入框包装器样式 */
+.el-input__wrapper,
+.el-textarea__inner,
+.el-select__wrapper {
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.82);
+  box-shadow: 0 0 0 1px rgba(60, 60, 67, 0.14) inset;
+  transition:
+    box-shadow 0.18s ease,
+    background-color 0.18s ease;
+}
+
+/* 输入框聚焦态：蓝色光圈 */
+.el-input__wrapper.is-focus,
+.el-select__wrapper.is-focused,
+.el-textarea__inner:focus {
+  background: rgba(255, 255, 255, 0.96);
+  box-shadow:
+    0 0 0 1px rgba(0, 113, 227, 0.42) inset,
+    0 0 0 4px rgba(0, 113, 227, 0.12);
+}
+
+/* 带 append/prepend 按钮的输入组：光圈画在外层组上，否则只框住左侧输入区 */
+.el-input-group--append .el-input__wrapper,
+.el-input-group--prepend .el-input__wrapper {
+  border-radius: 8px 0 0 8px;
+  background: rgba(255, 255, 255, 0.96);
+}
+
+.el-input-group--append .el-input__wrapper.is-focus,
+.el-input-group--prepend .el-input__wrapper.is-focus {
+  box-shadow: 0 0 0 1px rgba(60, 60, 67, 0.14) inset;
+}
+
+.el-input-group--append:focus-within,
+.el-input-group--prepend:focus-within {
+  border-radius: 8px;
+  box-shadow:
+    0 0 0 1px rgba(0, 113, 227, 0.42),
+    0 0 0 4px rgba(0, 113, 227, 0.12);
+}
+
+.el-input-group--append .el-input-group__append {
+  border-radius: 0 8px 8px 0;
+}
+
+.el-input-group--prepend .el-input-group__prepend {
+  border-radius: 8px 0 0 8px;
+}
+
+.el-input-group__append .el-button,
+.el-input-group__prepend .el-button {
+  border-radius: 0;
+}
+
+/* 表单标签 */
+.el-form-item__label {
+  color: var(--apple-secondary);
+  font-size: 13px;
+  font-weight: 600;
+}
+
+/* 表格组件 */
+.el-table {
+  --el-table-header-bg-color: rgba(245, 245, 247, 0.8);
+  --el-table-border-color: rgba(60, 60, 67, 0.1);
+  --el-table-row-hover-bg-color: rgba(0, 113, 227, 0.045);
+  color: var(--apple-text);
+  border-radius: 8px;
+  overflow: hidden;
+  background: rgba(255, 255, 255, 0.66);
+}
+
+/* 表头单元格 */
+.el-table th.el-table__cell {
+  color: var(--apple-secondary);
+  font-size: 12px;
+  font-weight: 700;
+}
+
+/* 标签组件：胶囊形 */
+.el-tag {
+  border-radius: 999px;
+  font-weight: 600;
+}
+
+/* 警告提示 */
+.el-alert {
+  border-radius: 8px;
+}
+
+/* 分割线 */
+.el-divider {
+  border-color: rgba(60, 60, 67, 0.12);
+}
+
+/* ============================================
+ * 响应式布局：移动端适配（<= 900px）
+ * ============================================ */
+@media (max-width: 900px) {
+  /* 外壳改为单列布局 */
+  .app-shell {
+    grid-template-columns: 1fr;
+  }
+
+  /* 侧边栏取消粘性定位 */
+  .sidebar {
+    position: static;
+    height: auto;
+  }
+
+  /* 导航菜单改为两列 */
+  .sidebar nav {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  /* 多列布局全部改为单列 */
+  .chat-workbench,
+  .chat-workbench:has(.conversation-panel.collapsed),
+  .page-grid.two,
+  .chart-grid,
+  .metric-row {
+    grid-template-columns: 1fr;
+  }
+
+  /* 移动端：会话面板放到聊天区下方 */
+  .conversation-panel {
+    order: 2;
+  }
+
+  .chat-panel {
+    order: 1;
+  }
+
+  /* 工具栏纵向排列 */
+  .knowledge-topbar {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .upload-actions {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  /* 工作区内边距缩小 */
+  .workspace {
+    padding: 16px;
+  }
+
+  /* 消息输入栏改为纵向排列 */
+  .composer {
+    flex-wrap: wrap;
+  }
+}

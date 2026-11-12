@@ -1,0 +1,43 @@
+services:
+  redis:
+    image: redis:7-alpine
+    ports:
+      - "6379:6379"
+
+  backend:
+    build:
+      context: .
+      dockerfile: backend/Dockerfile
+    environment:
+      DATABASE_URL: sqlite:////app/storage/neusoft_ai.db
+      REDIS_URL: redis://redis:6379/0
+      CORS_ORIGINS: http://localhost,http://localhost:5173,http://127.0.0.1:5173
+      SECRET_KEY: ${SECRET_KEY:-please-change-this-secret}
+      LLM_PROVIDER: ${LLM_PROVIDER:-openai}
+      LLM_BASE_URL: ${LLM_BASE_URL:-https://api.openai.com/v1}
+      LLM_MODEL: ${LLM_MODEL:-gpt-4o-mini}
+      LLM_API_KEY: ${LLM_API_KEY:-}
+      # 容器不继承宿主环境变量，显式透传以便代码层回退读取
+      OPENAI_API_KEY: ${OPENAI_API_KEY:-}
+      DASHSCOPE_API_KEY: ${DASHSCOPE_API_KEY:-}
+      LLM_TEMPERATURE: ${LLM_TEMPERATURE:-0.3}
+      EMBED_BASE_URL: ${EMBED_BASE_URL:-https://dashscope.aliyuncs.com/compatible-mode/v1}
+      EMBED_MODEL: ${EMBED_MODEL:-text-embedding-v3}
+      EMBED_API_KEY: ${EMBED_API_KEY:-}
+    volumes:
+      - backend-data:/app/storage
+    ports:
+      - "8000:8000"
+    depends_on:
+      - redis
+
+  frontend:
+    build:
+      context: frontend
+    ports:
+      - "80:80"
+    depends_on:
+      - backend
+
+volumes:
+  backend-data:
